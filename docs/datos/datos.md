@@ -8,32 +8,30 @@ Escribe texto normal, sin comandos LaTeX. No uses `|` dentro de una celda.
 
 ## Datos generales
 
-- Título: Título del proyecto
-- Subtítulo: Una idea central para desarrollar
-- Título corto: Tema del proyecto
-- Institución: Universidad Dr. Andrés Bello
-- Facultad: Facultad de Tecnología e Innovación
-- Asignatura: Nombre de la asignatura
-- Docente: Nombre del docente
-- Grupo: Grupo 01
-- Lugar y fecha: San Miguel, fecha de entrega
+- Título: CircuitRush: Restaura la Energía
+- Subtítulo: Vibecoding Guiado: Desarrollo de una Aplicación o Mini-Juego con IA como Copiloto
+- Título corto: CircuitRush · KODIGO
+- Institución: KODIGO Academy
+- Facultad: AI for Developers
+- Asignatura: AI for Developers Jr. 3 — KODIGO Academy
+- Docente: No indicado en la consigna
+- Grupo: Actividad individual
+- Lugar y fecha: Actividad de Semana 2
 - Firma: Jaime Berrios
 
 ## Integrantes
 
 | Nombre | Código |
 |---|---|
-| Nombre completo | Código |
-| Nombre completo | Código |
-| Nombre completo | Código |
+| Jaime Fernando Berrios Ortiz | No aplica |
 
 ## Tema y objetivo
 
-Describe qué investigarás, el problema que quieres abordar y el objetivo del trabajo.
+Documentar CircuitRush y sus tres iteraciones para la actividad individual «Vibecoding Guiado: Desarrollo de una Aplicación o Mini-Juego con IA como Copiloto», de KODIGO Academy.
 
 ## Indicaciones del docente
 
-Agrega la consigna, la rúbrica, el formato de citas y cualquier requisito obligatorio.
+El Prompt 04, conservado en datos/info.md, solicita exclusivamente descripción del proyecto, evidencia de vibecoding, iteración y mejora, validación y reflexión final. Evaluación: funcionamiento (2.5), uso estratégico de IA (2.5), iteración y mejora (3), comprensión y validación (2). No modificar el videojuego ni el motor documental.
 
 ## Presentación
 
@@ -44,14 +42,16 @@ Agrega la consigna, la rúbrica, el formato de citas y cualquier requisito oblig
 
 ## Reporte
 
-- Extensión: por definir.
-- Secciones obligatorias: por definir.
-- Anexos: incluir solo si aportan al trabajo.
+- Extensión: breve, proporcional a una actividad práctica.
+- Secciones obligatorias: descripción del proyecto; evidencia de vibecoding; iteración y mejora; validación del resultado; reflexión final.
+- Anexos: transcripción íntegra de los tres prompts de desarrollo dentro del PDF.
 
 ## Contenido y fuentes
 
-Agrega apuntes, resultados, enlaces y referencias. Indica qué información está
-confirmada y qué hace falta investigar. Codex usará estas secciones como guía;
-el compilador sincroniza los datos generales y los integrantes. Registra las
-fuentes bibliográficas confirmadas en `datos/referencias.json`, redactadas en APA 7;
-mantén aquí los apuntes, enlaces pendientes y la consigna del docente.
+Fuentes propias: README.md, datos/info.md, iteraciones.md, código del juego, tests/game.test.cjs y capturas reales en assets/contenido/. No se usan fuentes externas ni bibliografía de ejemplo.
+
+Datos confirmados: Jaime Fernando Berrios Ortiz, sin código. Firma manuscrita: Jaime Berrios. Identidad visual exclusiva de KODIGO Academy con el logo proporcionado. La portada no incluye docente, código ni fecha de entrega no confirmados. Antigravity fue el entorno de programación asistida indicado por el estudiante.
+
+La reflexión se conserva como propuesta de revisión personal; el estudiante no ha confirmado todavía las afirmaciones de aprendizaje y comprensión. La consigna íntegra proporcionada por el estudiante orienta las cinco secciones, los tres prompts y las evidencias.
+
+Validación documental actual: node --test tests/game.test.cjs resume 1 archivo aprobado, 0 fallidos y 0 omitidos en este entorno. La ejecución complementaria node tests/game.test.cjs informa 19 pruebas aprobadas, 0 fallidas y 0 omitidas. Los registros se guardan en assets/contenido/evidencias/reporte-kodigo/kodigo-node-test.tap y assets/contenido/evidencias/reporte-kodigo/kodigo-node-detalle.tap. El cliente Flask obtiene HTTP 200 para la página, CSS y JavaScript (assets/contenido/evidencias/reporte-kodigo/kodigo-flask.txt). Las pruebas Firefox de las iteraciones previas se describen como históricas.

@@ -2,125 +2,140 @@
 \usepackage{fontspec}
 \usepackage[spanish,es-noshorthands,es-tabla,es-lcroman]{babel}
 \usepackage{../plantilla/latex/unab_reporte}
-
-% Los datos compartidos se generan desde datos/datos.md al ejecutar compilar.py.
 \input{../.build/datos.tex}
 \input{../.build/citas.tex}
-\hypersetup{pdftitle={\TituloTrabajo},pdfauthor={\NombreFirma}}
-
+% El nombre completo procede del primer integrante; Firma conserva el nombre corto.
+\def\ExtraerNombreAutor#1&#2\FinAutor{#1}
+\renewcommand{\NombreAutor}{\expandafter\ExtraerNombreAutor\Integrantes\FinAutor}
+\hypersetup{pdftitle={\TituloTrabajo},pdfauthor={\NombreAutor}}
 \begin{document}
 \portadareporte
-\pagenumbering{roman}
-\section*{Resumen}
-\addcontentsline{toc}{section}{Resumen}
-Escribe aquí una síntesis del reporte: el problema abordado, el objetivo,
-la metodología utilizada, los principales resultados y la conclusión central.
-Redacta este apartado cuando hayas terminado el desarrollo del documento.
-
-\textbf{Palabras clave:} tema; concepto; área de estudio.
-\clearpage
-\tableofcontents
-\clearpage
 \pagenumbering{arabic}
 
-\section{Introducción}
-Presenta el tema, su contexto y su importancia. Describe el problema o la
-pregunta que motiva el trabajo, el alcance del reporte y cómo está organizado.
-Reemplaza todos los textos de orientación con el contenido de tu investigación.
+\section{Descripción del proyecto}
+CircuitRush: Restaura la Energía es un minijuego web de lógica ambientado en una ciudad sin suministro eléctrico. El jugador debe orientar un circuito para conducir energía desde una fuente fija hasta un destino. Cada clic, o activación con Enter o Espacio, gira una pieza móvil 90 grados en sentido horario y suma un movimiento.
 
-\section{Objetivos}
-\subsection{Objetivo general}
-Expresa el propósito principal del trabajo con un verbo en infinitivo.
-\subsection{Objetivos específicos}
-\begin{itemize}
-  \item Identificar los elementos principales del problema de estudio.
-  \item Analizar la información recopilada mediante criterios definidos.
-  \item Proponer recomendaciones a partir de los resultados obtenidos.
-\end{itemize}
+La propagación utiliza un recorrido en anchura (BFS): solo atraviesa casillas adyacentes cuando las conexiones coinciden en ambos extremos. Un conjunto de visitados evita recorridos repetidos y el color cian identifica las piezas energizadas. Se gana al alcanzar el destino y se pierde al agotarse el tiempo. Ambos resultados bloquean el tablero y permiten reintentar.
 
-\section{Marco teórico}
-\subsection{Conceptos fundamentales}
-Desarrolla las definiciones y los antecedentes necesarios para comprender el
-tema. Respalda las afirmaciones con fuentes y citas, por ejemplo~\cita{fuente}.
-La referencia incluida al final es un modelo que debes reemplazar.
-\subsection{Antecedentes}
-Describe los trabajos previos y explica su relación con el problema estudiado.
+Existen tres niveles fijos: Encendido, de $4\times4$ y 120 segundos; Reconexión, de $5\times5$ y 180 segundos; y Sobrecarga, de $6\times6$ y 240 segundos. Completar uno desbloquea el siguiente. El reloj comienza con el primer giro válido y calcula el tiempo transcurrido real. Solo se puntúa al ganar:
+\[
+P=\max(0,\;1000+10s-20m),
+\]
+donde $s$ son los segundos restantes y $m$ los movimientos. Cada nivel conserva su mejor puntuación y menor número de movimientos en \texttt{localStorage}, junto con los desbloqueos; no se guarda la partida en curso.
 
-\section{Metodología}
-Explica el enfoque del trabajo, las fuentes de información, los instrumentos
-utilizados y el procedimiento seguido. Indica los criterios de selección y
-las limitaciones para que el proceso pueda comprenderse y reproducirse.
+Python y Flask sirven la página y sus archivos; HTML5 define la estructura, CSS3 presenta las piezas y JavaScript Vanilla controla la interacción. No hay cuentas, base de datos ni IA dentro del juego. La IA apoyó la programación y validación; Antigravity fue el entorno de programación asistida utilizado durante el desarrollo.
 
-\section{Resultados y análisis}
-\subsection{Presentación de resultados}
-Expón los hallazgos de forma ordenada. La tabla~\ref{tab:resultados} muestra
-una estructura de ejemplo; sustituye las filas con tus datos.
+La actividad corresponde a la Semana 2 del curso AI for Developers Jr. 3 de KODIGO Academy. El trabajo presenta la evolución de una aplicación funcional, el uso progresivo de prompts y la validación crítica del código generado.
+
+\clearpage
+\section{Evidencia de vibecoding}
+Se utilizaron tres prompts progresivos: funcionamiento, presentación y ampliación de jugabilidad. A continuación se explica qué se solicitó, por qué se refinó la instrucción y qué resultado se obtuvo. Los textos completos se incluyen en el material de respaldo al final del documento (página~\pageref{anexo:prompts}).
+
+\textbf{Prompt 01: desarrollo del MVP funcional}\par
+\textbf{Objetivo y solicitud.} Crear un tablero reproducible de $4\times4$, rotaciones horarias, conexiones recíprocas, propagación BFS o DFS, contador, victoria y reinicio, con Flask y JavaScript Vanilla. Exigió pruebas y resultados reales; excluyó temporizadores y ampliaciones prematuras.
+
+\textbf{Motivo y resultado.} Acotar la primera versión permitió comprobar la mecánica antes de ampliarla. Se implementaron estado, conexiones, propagación y giro, además de siete pruebas iniciales. La figura~\ref{fig:mvp} muestra la interfaz funcional.
+
+\textbf{Prompt 02: rediseño visual futurista y mejoras UX}\par
+\textbf{Objetivo y solicitud.} Inspeccionar y conservar el MVP, mejorar la jerarquía visual, los estados eléctricos, las animaciones, el modal, el teclado y la adaptación responsive, sin agregar niveles ni reloj.
+
+\textbf{Motivo y resultado.} El refinamiento abordó la claridad visual sobre una lógica ya verificable. Se incorporaron la consola energética, indicadores de conexión, brillo, transiciones y foco visible, respetando movimiento reducido. La figura~\ref{fig:rediseno} permite comparar el resultado con el MVP.
+
+\textbf{Prompt 03: niveles, temporizador, puntuación y récords}\par
+\textbf{Objetivo y solicitud.} Añadir tres tamaños de tablero, soluciones verificadas mediante giros legales, reloj basado en tiempo real, puntuación explicable, récords locales, desbloqueo y resultados de victoria o derrota. Exigió conservar las siete pruebas y comprobar datos corruptos y bloqueos.
+
+\textbf{Motivo y resultado.} Sobre la interfaz anterior se amplió la progresión y la repetición de partidas. El código contiene tres configuraciones resolubles, una sesión que gestiona el reloj y almacenamiento tolerante a fallos. Las figuras~\ref{fig:niveles} y~\ref{fig:puntos} documentan esos cambios.
+
+\clearpage
+\section{Iteración y mejora}
+El desarrollo se organizó en tres etapas para controlar el alcance y conservar el funcionamiento anterior. La tabla~\ref{tab:iteraciones} resume los cambios y las evidencias de cada una.
 \begin{table}[htbp]
-  \centering
-  \caption{Síntesis de resultados (ejemplo de estructura)}
-  \label{tab:resultados}
-  \begin{tabularx}{\linewidth}{@{}lXX@{}}
-    \toprule
-    \textbf{Criterio} & \textbf{Resultado} & \textbf{Interpretación} \\
-    \midrule
-    Criterio 1 & Describe el hallazgo. & Explica su significado. \\
-    Criterio 2 & Describe el hallazgo. & Relación con el objetivo. \\
-    Criterio 3 & Describe el hallazgo. & Implicaciones principales. \\
-    \bottomrule
-  \end{tabularx}
-  \par\smallskip {\small Fuente: elaboración propia.}
+\centering
+\caption{Evolución de CircuitRush}
+\label{tab:iteraciones}
+\begin{tabularx}{\linewidth}{@{}p{1.9cm}XX@{}}
+\toprule
+\textbf{Iteración} & \textbf{Mejora principal} & \textbf{Evidencia} \\
+\midrule
+01 & Tablero $4\times4$, BFS, giros, victoria y reinicio. & Siete pruebas iniciales y captura del MVP. \\
+02 & Rediseño, estados eléctricos, animaciones, teclado y responsive. & Capturas Firefox y pruebas de foco y movimiento reducido. \\
+03 & Niveles, reloj, puntos, récords y desbloqueo. & Diecinueve pruebas y capturas de niveles y puntuación. \\
+\bottomrule
+\end{tabularx}
+\par\smallskip{\small Nota. Síntesis del código y del registro de iteraciones del repositorio.}
 \end{table}
 
-\subsection{Discusión}
-Interpreta los resultados y contrástalos con el marco teórico. Distingue entre
-los datos observados y tus interpretaciones. Explica las limitaciones del análisis.
-
-% Para destacar una nota u observación importante, usa:
-% \begin{cajanota}[Nota metodológica]
-%   Escribe aquí el texto destacado, hallazgo o consideración relevante.
-% \end{cajanota}
-
-% Para insertar un bloque de código fuente con estilo UNAB, descomenta:
-% \begin{lstlisting}[language=Python, caption={Ejemplo de procesamiento de datos}]
-% def procesar_datos(registros):
-%     return [item.strip() for item in registros if item]
-% \end{lstlisting}
-
-% Para insertar una figura, guarda el archivo en assets/contenido/imagenes/ y descomenta:
-% \begin{figure}[htbp]
-%   \centering
-%   \includegraphics[width=0.8\linewidth]{../assets/contenido/imagenes/resultado.png}
-%   \caption{Descripción de la figura. Fuente: elaboración propia.}
-%   \label{fig:resultado}
-% \end{figure}
-
-\section{Conclusiones}
-Responde al objetivo general y sintetiza los hallazgos principales. Explica
-qué se puede concluir a partir de la evidencia presentada, sin introducir
-resultados nuevos.
-
-\section{Recomendaciones}
-Propón acciones concretas derivadas de las conclusiones. Señala responsables,
-condiciones o líneas de investigación futura cuando corresponda.
+Las figuras~\ref{fig:mvp} y~\ref{fig:rediseno} muestran el paso de los indicadores básicos a una consola energética. Se conservaron fuente, destino y rotación.
+\begin{figure}[htbp]
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth,height=7.1cm,keepaspectratio,trim=487bp 0bp 487bp 31bp,clip]{../assets/contenido/imagenes/Captura 01.png}
+\caption{MVP: tablero inicial de 16 piezas}
+\label{fig:mvp}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth,height=7.1cm,keepaspectratio,trim=450bp 0bp 450bp 0bp,clip]{../assets/contenido/evidencias/iteracion-02/captura-05-interfaz-1366x768.png}
+\caption{Consola rediseñada en la iteración 02}
+\label{fig:rediseno}
+\end{minipage}
+\par\smallskip{\small Nota. Capturas propias del repositorio. Se recortan márgenes exteriores para facilitar la comparación y se conserva la proporción.}
+\end{figure}
 
 \clearpage
-\phantomsection
-\addcontentsline{toc}{section}{Referencias}
-\section*{Referencias}
-\begin{doublespace}
-\input{../.build/referencias-reporte.tex}
-\end{doublespace}
+La tercera iteración añade selector, bloqueos y reloj. La figura~\ref{fig:niveles} muestra Reconexión; Sobrecarga amplía el tablero a $6\times6$. Las pruebas verifican que los tres niveles empiezan sin resolver y que una secuencia legal alcanza el destino. No se afirma que esas soluciones sean mínimas.
+\begin{figure}[htbp]
+\begin{minipage}[t]{0.48\linewidth}
+\vspace{0pt}\centering
+\includegraphics[width=\linewidth,height=9cm,keepaspectratio,trim=350bp 290bp 350bp 0bp,clip]{../assets/contenido/evidencias/iteracion-03/captura-10-nivel-02.png}
+\caption{Reconexión: tablero $5\times5$, selector y reloj}
+\label{fig:niveles}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\vspace{0pt}\centering
+\includegraphics[width=\linewidth,height=7cm,keepaspectratio,trim=450bp 850bp 450bp 240bp,clip]{../assets/contenido/evidencias/iteracion-03/captura-13-victoria.png}
+\caption{Victoria con 12 movimientos y 1960 puntos}
+\label{fig:puntos}
+\end{minipage}
+\par\smallskip{\small Nota. Capturas 10 y 13 de Firefox, recortadas sin deformación. Se conserva el tablero completo y el modal de resultado. La puntuación mostrada es $1000+120(10)-12(20)=1960$.}
+\end{figure}
 
 \clearpage
-\appendix
-\section{Material complementario}
-Incluye instrumentos, datos adicionales, evidencias u otros materiales que
-complementen el reporte. Elimina esta sección si no necesitas anexos.
+\section{Validación del resultado}
+\textbf{Resultados actuales.} Se ejecutó nuevamente el comando solicitado:
+\begin{quote}\ttfamily\small node --test tests/game.test.cjs\end{quote}
+Terminó correctamente y resumió \textbf{1 archivo aprobado, 0 fallidos y 0 omitidos} en este entorno. La ejecución complementaria \texttt{node tests/game.test.cjs} detalló \textbf{19 pruebas aprobadas, 0 fallidas y 0 omitidas}. Se distingue el conteo por archivo del de casos. Los registros de ejecución respaldan estos resultados.
 
-% ==============================================================================
-% FIRMA INSTITUCIONAL: Se imprime obligatoriamente al final de todo el reporte,
-% después de los anexos (o tras las referencias si no hay anexos).
-% Consérvala siempre en el documento final.
-% ==============================================================================
+La suite verifica giros, movimientos, conexiones recíprocas, ciclos, victoria, bloqueo y reinicio; valida los tres tamaños y sus soluciones mediante giros legales. Con reloj controlado comprueba inicio, decremento, parada, reinicio e intervalo único. También cubre puntuación no negativa, récords, recarga simulada, datos corruptos, niveles bloqueados y desbloqueo. El DOM simulado valida controles; no sustituye un navegador.
+
+\textbf{Ejecución local.} \texttt{.venv/bin/python app.py} sirve el juego en \url{http://127.0.0.1:5000}. En esta revisión, el cliente Flask obtuvo HTTP 200 para página, CSS y JavaScript. No se presenta como una interacción visual nueva.
+
+\textbf{Evidencia histórica y ajuste.} Las iteraciones 02 y 03 registran automatización en Firefox de teclado, victoria, continuación, recarga y movimiento reducido. En la segunda, Tab permitía abandonar el botón del modal: se añadió manejo de teclado y la repetición documentada aprobó. La tercera amplió ese manejo a la continuación. Otro ajuste fue usar una esquina en fila 4, columna 3 para permitir el recorrido; la suite actual verifica su solución de 12 movimientos.
+
+\textbf{Alcance y límites.} Las mediciones históricas no detectaron desbordamiento a 1366, 768 y 500 píxeles. Las capturas de 390 usaron una configuración de prueba; la derrota en Firefox utilizó reloj inyectado. No se repitió esa automatización al redactar este reporte. No existen evidencias de interacción táctil física, lector de pantalla, otros navegadores o suspensión real de pestaña por el sistema operativo. Las pruebas temporales simulan retrasos. No se confunden estas comprobaciones automatizadas con pruebas manuales, ni se afirma accesibilidad total.
+
+\clearpage
+\section{Reflexión final}
+\label{sec:reflexion}
+\textbf{Propuesta para revisión personal.} Las respuestas siguientes requieren la revisión del autor para confirmar que describen su aprendizaje y su comprensión del código.
+
+\textbf{a. ¿Qué aprendí utilizando IA para programar?}
+
+Aprendí a dividir una solicitud en cambios comprobables: primero el circuito, después la interfaz y finalmente los niveles y el reloj. Pedir una función no fue suficiente; también necesité establecer cómo comprobarla, por ejemplo mediante conexiones recíprocas y una secuencia de giros que alcanzara el destino.
+
+\textbf{b. ¿Qué ventajas y limitaciones identifiqué del vibecoding?}
+
+La ventaja que identifico es convertir instrucciones concretas en una implementación y revisarla por etapas. La limitación es que una respuesta o captura no demuestra todo el funcionamiento. Las pruebas con un reloj simulado ayudan a revisar el vencimiento, pero no sustituyen la interacción en un móvil físico ni la revisión del código generado.
+
+\textbf{c. ¿Qué partes del código comprendo y cuáles necesito reforzar?}
+
+Puedo explicar la separación entre Flask, la interfaz y el estado del juego, así como la relación entre un giro y el contador. Necesito reforzar BFS, el control del tiempo y la validación del almacenamiento. Antes de presentar esta respuesta como definitiva, debo confirmar cuáles de estas partes comprendo realmente y demostrarlas con el código.
+
+\clearpage
+\section*{Material de respaldo: prompts utilizados}
+\label{anexo:prompts}
+Los siguientes textos reproducen íntegramente los tres prompts de desarrollo, en orden. Se conservan sus instrucciones y restricciones originales; las limitaciones de cada etapa deben interpretarse dentro de esa iteración. La tipografía compacta permite mantener separado este respaldo del reporte principal.
+
+\input{prompts-desarrollo.tex}
 \firmareporte
 \end{document}

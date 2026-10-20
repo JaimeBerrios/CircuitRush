@@ -1,0 +1,3 @@
+GET /: HTTP 200
+GET /static/css/style.css: HTTP 200
+GET /static/js/game.js: HTTP 200

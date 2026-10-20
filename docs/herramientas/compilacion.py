@@ -118,9 +118,7 @@ def compiler_directory():
 
 
 RECURSOS_OBLIGATORIOS = (
-    "assets/institucional/isotipo-azul.png",
-    "assets/institucional/logo-facultad.png",
-    "assets/institucional/acreditacion.png",
+    "assets/institucional/logo.png",
     "assets/fuentes/firma.otf",
 )
 

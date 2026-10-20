@@ -71,6 +71,10 @@ Los dos tableros nuevos se construyen a partir de rutas serpentinas fijas, sin a
 
 Evidencias y límites de verificación: `docs/assets/contenido/evidencias/iteracion-03/README.md`. Historial y los tres prompts íntegros en `docs/iteraciones.md` y `docs/datos/info.md`. Pendientes: móvil físico, lector de pantalla y otros navegadores. La sesión no se guarda; no hay cuentas ni sincronización entre equipos.
 
+## Reporte de la actividad
+
+El [reporte académico para KODIGO](docs/pdf/reporte.pdf) contiene la descripción del juego, las explicaciones de los tres prompts, la comparación de iteraciones, capturas reales, validación y reflexión. Los tres prompts íntegros se incluyen como respaldo al final: siete páginas de reporte, incluida la portada, y veintiuna de transcripciones. La reflexión conserva una nota de revisión personal hasta que el autor confirme su contenido.
+
 ## Control de versiones
 
 El código está preparado para Git con `.gitignore` para el entorno virtual y cachés. No se realizan commits ni pushes automáticamente. Node se usa solo para las pruebas; el juego requiere Python/Flask y un navegador con JavaScript.

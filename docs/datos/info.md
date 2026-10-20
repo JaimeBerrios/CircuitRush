@@ -1011,3 +1011,338 @@ Al finalizar, entregar un resumen técnico con:
 - Priorizar claridad, estabilidad y comprensión del código.
 
 **Comienza analizando el proyecto existente y desarrolla exclusivamente la Iteración 03.**
+
+# PROMPT 04 — CIRCUITRUSH: GENERACIÓN DEL REPORTE ACADÉMICO PARA KODIGO
+
+## 1. Rol y contexto
+
+Actúa como especialista en documentación académica, ingeniería de software, Python y LaTeX, con experiencia en redacción técnica, validación de evidencias y generación automatizada de documentos.
+
+Trabajaremos sobre el proyecto existente **CircuitRush: Restaura la Energía**, desarrollado para la actividad individual «Vibecoding Guiado: Desarrollo de una Aplicación o Mini-Juego con IA como Copiloto», del bootcamp AI for Developers Jr. 3 de KODIGO Academy.
+
+El videojuego fue desarrollado mediante tres iteraciones utilizando Python, Flask, HTML, CSS, JavaScript y Antigravity como entorno de programación asistida por IA.
+
+El objetivo es generar un reporte académico breve, profesional y verificable, utilizando exclusivamente los requisitos establecidos por KODIGO.
+
+**No desarrollaremos nuevas funcionalidades del videojuego. Esta intervención se limita a documentación, revisión de evidencias y compilación del reporte.**
+
+## 2. Sistema documental existente
+
+El repositorio cuenta con un sistema automatizado de generación documental basado en Python, LaTeX y Tectonic.
+
+Su funcionamiento ya está implementado y validado.
+
+Archivos principales:
+
+- `docs/compilar.py`
+- `docs/herramientas/compilacion.py`
+- `docs/datos/datos.md`
+- `docs/datos/referencias.json`
+- `docs/datos/info.md`
+- `docs/iteraciones.md`
+- `docs/documentos/reporte.tex`
+- `docs/assets/contenido/`
+- `docs/pdf/reporte.pdf`
+
+El sistema procesa metadatos, recursos institucionales y contenido LaTeX para generar automáticamente el PDF.
+
+**Restricción obligatoria:** no reconstruir, reemplazar ni refactorizar el sistema de compilación.
+
+No modificar `compilar.py`, `herramientas/compilacion.py` ni los recursos institucionales, salvo que exista un error real que impida generar el documento y se solicite autorización antes de corregirlo.
+
+Conservar la identidad institucional UNAB de la plantilla existente.
+
+No presentar a UNAB como organizadora de KODIGO ni inventar una relación institucional. Diferenciar claramente los metadatos de la plantilla y la entidad responsable de la actividad.
+
+## 3. Inspección de fuentes
+
+Antes de redactar:
+
+1. Leer `README.md`.
+2. Leer `docs/datos/info.md`.
+3. Leer `docs/iteraciones.md`.
+4. Inspeccionar el código fuente del videojuego.
+5. Examinar las pruebas en `tests/game.test.cjs`.
+6. Revisar las evidencias de las tres iteraciones.
+7. Inspeccionar `docs/datos/datos.md`.
+8. Examinar la estructura de `docs/documentos/reporte.tex`.
+9. Verificar el sistema de compilación existente.
+
+Utilizar información real del repositorio.
+
+No inventar resultados, pruebas, errores, prompts, fechas ni decisiones técnicas.
+
+## 4. Alcance del reporte
+
+El reporte debe incluir únicamente:
+
+1. Descripción del proyecto.
+2. Evidencia de vibecoding y prompts.
+3. Iteración y mejora.
+4. Validación del resultado.
+5. Reflexión final.
+
+La portada se conservará según el sistema documental existente.
+
+No agregar:
+
+- Marco teórico.
+- Antecedentes históricos.
+- Hipótesis.
+- Metodología de investigación extensa.
+- Objetivos generales y específicos independientes.
+- Justificación académica extensa.
+- Capítulos de investigación ajenos a la actividad.
+- Conclusiones repetitivas.
+- Bibliografía artificial.
+
+Las referencias bibliográficas solo se incorporarán si se utilizan fuentes externas reales y verificables. No es obligatorio añadir bibliografía cuando el reporte se fundamenta únicamente en el código y las evidencias propias.
+
+## 5. Sección 1 — Descripción del proyecto
+
+Redactar una descripción breve de CircuitRush.
+
+Explicar:
+
+- Problema o desafío del videojuego.
+- Objetivo del jugador.
+- Mecánica de rotación de circuitos.
+- Propagación eléctrica.
+- Condiciones de victoria y derrota.
+- Niveles progresivos.
+- Temporizador y puntuación.
+- Tecnologías utilizadas.
+
+Explicar brevemente que Flask sirve la aplicación web y JavaScript gestiona la lógica interactiva.
+
+No afirmar que CircuitRush utiliza inteligencia artificial internamente. La IA fue una herramienta de apoyo durante su desarrollo.
+
+Extensión sugerida: media página a una página.
+
+## 6. Sección 2 — Evidencia de vibecoding
+
+Documentar los tres prompts utilizados.
+
+Para cada uno, incluir:
+
+- Identificación del prompt.
+- Objetivo.
+- Resumen fiel de lo solicitado.
+- Motivo de la instrucción o refinamiento.
+- Resultado implementado y verificable.
+
+Prompts:
+
+**Prompt 01:** desarrollo del MVP funcional.
+
+**Prompt 02:** rediseño visual futurista y mejoras de experiencia de usuario.
+
+**Prompt 03:** niveles progresivos, temporizador, puntuación y récords.
+
+Extraer la información de `docs/datos/info.md`.
+
+Incorporar los textos completos de los tres prompts únicamente si el contenido y la extensión lo permiten sin perjudicar la claridad del documento. Como mínimo, el reporte debe contener los resúmenes y explicaciones solicitados por KODIGO, con referencia a los prompts completos conservados en el repositorio.
+
+No reescribir los prompts como si hubiesen sido formulados de otra manera.
+
+Explicar cómo cada prompt evolucionó respecto al anterior.
+
+## 7. Sección 3 — Iteración y mejora
+
+Presentar la evolución del proyecto mediante las tres iteraciones.
+
+### Iteración 01
+
+Describir el desarrollo del tablero inicial y la lógica básica.
+
+### Iteración 02
+
+Describir el rediseño visual, los estados energéticos, las animaciones, la accesibilidad y las mejoras responsive.
+
+### Iteración 03
+
+Describir los tres niveles, el temporizador, la puntuación, el almacenamiento local de récords y el desbloqueo progresivo.
+
+Incluir una tabla comparativa breve que permita identificar los cambios realizados.
+
+Incorporar capturas reales del repositorio.
+
+Priorizar evidencias que muestren:
+
+- Primera versión funcional.
+- Rediseño de la interfaz.
+- Nuevos niveles.
+- Pantalla de victoria o puntuación.
+
+Cada figura debe tener un título descriptivo y una referencia dentro del texto.
+
+No generar capturas ficticias.
+
+Evitar insertar imágenes repetidas o que no aporten evidencia.
+
+## 8. Sección 4 — Validación del resultado
+
+Documentar cómo se verificó el funcionamiento del videojuego.
+
+Explicar brevemente:
+
+- Ejecución local mediante Flask.
+- Pruebas automatizadas con Node.js.
+- Pruebas de rotación.
+- Validación de conexiones eléctricas.
+- Detección de victoria.
+- Reinicio.
+- Validación de niveles.
+- Temporizador.
+- Puntuación.
+- Persistencia de récords.
+
+El historial disponible informa de 19 pruebas automatizadas aprobadas durante la Iteración 03.
+
+Sin embargo, antes de incorporar esa cifra como resultado actual, ejecutar nuevamente:
+
+`node --test tests/game.test.cjs`
+
+Registrar la cantidad real de pruebas aprobadas, fallidas y omitidas.
+
+Si no es posible ejecutar las pruebas, identificar el resultado como histórico y no como una verificación nueva.
+
+Identificar al menos un error, limitación o ajuste real, utilizando el registro de iteraciones.
+
+Para cada caso seleccionado, explicar:
+
+1. Problema identificado.
+2. Causa, cuando esté documentada.
+3. Ajuste realizado o limitación pendiente.
+4. Resultado de la verificación.
+
+No inventar defectos para cumplir la rúbrica.
+
+Distinguir las pruebas automatizadas de las manuales.
+
+Mencionar las limitaciones pendientes que sigan vigentes, como la validación en dispositivos táctiles físicos, lectores de pantalla u otros navegadores, si no existen evidencias posteriores de su resolución.
+
+## 9. Sección 5 — Reflexión final
+
+Esta sección debe responder expresamente:
+
+**a. ¿Qué aprendí utilizando IA para programar?**
+
+**b. ¿Qué ventajas y limitaciones identifiqué del vibecoding?**
+
+**c. ¿Qué partes del código comprendo y cuáles necesito reforzar?**
+
+La reflexión debe estar escrita en primera persona, con un tono natural, académico y personal.
+
+No atribuir al estudiante conocimientos, experiencias, dificultades ni aprendizajes que no hayan sido confirmados.
+
+Primero, elaborar una propuesta de reflexión claramente identificada como borrador para revisión personal.
+
+Si falta información sobre la experiencia del estudiante, señalarla y solicitar confirmación antes de presentar la reflexión como definitiva.
+
+Evitar afirmaciones genéricas como «la inteligencia artificial revolucionó mi forma de programar».
+
+Priorizar observaciones concretas relacionadas con CircuitRush.
+
+## 10. Estilo de redacción
+
+Aplicar las siguientes pautas:
+
+- Español académico natural.
+- Redacción clara y directa.
+- Párrafos breves.
+- Terminología técnica precisa.
+- Coherencia entre secciones.
+- Sin lenguaje publicitario.
+- Sin afirmaciones exageradas.
+- Sin información inventada.
+- Sin repeticiones innecesarias.
+- Sin descripciones extensas de funcionalidades evidentes.
+- Sin conclusiones que no estén respaldadas por pruebas.
+
+Mantener una extensión proporcional a una actividad práctica, no a una tesis.
+
+## 11. Formato documental
+
+Utilizar la plantilla LaTeX existente.
+
+Conservar:
+
+- Portada institucional.
+- Tipografías configuradas.
+- Márgenes.
+- Encabezados.
+- Numeración.
+- Estilo de figuras.
+- Identidad visual.
+
+No imponer una nueva plantilla.
+
+Respetar las convenciones académicas ya implementadas, incluidas las reglas APA cuando sean aplicables.
+
+Evitar modificar archivos auxiliares del motor documental.
+
+## 12. Generación y compilación
+
+Trabajar sobre `docs/documentos/reporte.tex`.
+
+Actualizar únicamente los archivos de contenido y metadatos necesarios.
+
+No sobrescribir `docs/datos/info.md` ni `docs/iteraciones.md` con el texto del reporte.
+
+Primero ejecutar:
+
+`cd docs && python3 compilar.py --verificar`
+
+Si la verificación es satisfactoria, ejecutar:
+
+`python3 compilar.py`
+
+El entregable esperado es:
+
+`docs/pdf/reporte.pdf`
+
+Si se detectan datos institucionales de ejemplo, no inventar sus reemplazos.
+
+Solicitar la información necesaria o identificar los campos pendientes.
+
+No modificar el motor para omitir validaciones.
+
+## 13. Revisión final del PDF
+
+Después de compilar:
+
+1. Verificar que el PDF exista.
+2. Confirmar que abra correctamente.
+3. Comprobar que la portada no tenga datos ficticios.
+4. Revisar que las cinco secciones estén presentes.
+5. Confirmar que las figuras correspondan al proyecto.
+6. Revisar que las imágenes no estén deformadas.
+7. Verificar que no existan tablas desbordadas.
+8. Comprobar que los títulos no queden aislados.
+9. Revisar que no existan páginas vacías innecesarias.
+10. Confirmar que los resultados de pruebas coincidan con la evidencia.
+
+Si existen herramientas de inspección visual del PDF, utilizarlas.
+
+No declarar una revisión visual completada si únicamente se verificó que el archivo existe.
+
+## 14. Entrega del resultado
+
+Al finalizar, presentar:
+
+- Ruta del PDF generado.
+- Secciones incorporadas.
+- Evidencias utilizadas.
+- Resultado real de las pruebas.
+- Estado de compilación.
+- Problemas encontrados.
+- Información pendiente de confirmación.
+
+No realizar commits ni pushes automáticamente.
+
+No modificar funcionalidades del videojuego.
+
+No generar presentaciones adicionales.
+
+**Comienza inspeccionando las fuentes del proyecto y prepara exclusivamente el reporte académico solicitado por KODIGO, utilizando el sistema de compilación existente.**

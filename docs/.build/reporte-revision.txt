@@ -1,0 +1,262 @@
+          Universidad Dr. Andrés Bello (identidad de la plantilla)
+                     Facultad de Tecnología e Innovación (plantilla)
+
+
+
+                                REPORTE ACADÉMICO
+
+
+                CircuitRush: Restaura la Energía
+       Actividad de KODIGO Academy · Plantilla documental UNAB
+
+
+
+
+Asignatura: AI for Developers Jr. 3 — KODIGO Academy
+Docente: Pendiente de confirmación
+Grupo: Actividad individual
+
+Integrantes
+
+Nombre completo                                                    Código
+Jaime Berrios                                                      Pendiente de confirmación
+
+
+
+
+                        Lugar y fecha pendientes de confirmación
+CircuitRush · KODIGO
+
+
+
+1. Descripción del proyecto
+
+CircuitRush: Restaura la Energía es un minijuego web de lógica ambientado en una ciudad
+sin suministro eléctrico. El jugador debe orientar un circuito para conducir energía desde una
+fuente fija hasta un destino. Cada clic, o activación con Enter o Espacio, gira una pieza móvil
+90 grados en sentido horario y suma un movimiento.
+
+La propagación utiliza un recorrido en anchura (BFS): solo atraviesa casillas adyacentes
+cuando las conexiones coinciden en ambos extremos. Un conjunto de visitados evita recorridos
+repetidos y el color cian identifica las piezas energizadas. Se gana al alcanzar el destino y se
+pierde al agotarse el tiempo. Ambos resultados bloquean el tablero y permiten reintentar.
+
+Existen tres niveles fijos: Encendido, de 4 × 4 y 120 segundos; Reconexión, de 5 × 5 y 180
+segundos; y Sobrecarga, de 6 × 6 y 240 segundos. Completar uno desbloquea el siguiente. El
+reloj comienza con el primer giro válido y calcula el tiempo transcurrido real. Solo se puntúa
+al ganar:
+                               P = máx(0, 1000 + 10s − 20m),
+
+donde s son los segundos restantes y m los movimientos. Cada nivel conserva su mejor
+puntuación y menor número de movimientos en localStorage, junto con los desbloqueos;
+no se guarda la partida en curso.
+
+Python y Flask sirven la página y sus archivos; HTML5 define la estructura, CSS3 presenta
+las piezas y JavaScript Vanilla controla la interacción. No hay cuentas, base de datos ni IA
+dentro del juego. La IA apoyó la programación y validación; Antigravity es el entorno de
+desarrollo declarado por el estudiante en el Prompt 04.
+
+Contexto documental. La actividad individual pertenece al bootcamp AI for Developers
+Jr. 3 de KODIGO Academy. La identidad UNAB corresponde únicamente a la plantilla
+solicitada; no se afirma una relación organizativa entre ambas entidades. Este documento es
+un borrador: faltan datos de portada y la revisión personal de la sección 5.
+
+
+
+
+Reporte académico                                                                             1
+CircuitRush · KODIGO
+
+
+
+2. Evidencia de vibecoding
+
+Los prompts completos se conservan en orden en docs/datos/info.md. Los siguientes resú-
+menes no son transcripciones. Su evolución separó funcionamiento, presentación y ampliación
+de jugabilidad.
+
+Prompt 01: desarrollo del MVP funcional
+
+Objetivo y solicitud. Crear un tablero reproducible de 4 × 4, rotaciones horarias, conexio-
+nes recíprocas, propagación BFS o DFS, contador, victoria y reinicio, con Flask y JavaScript
+Vanilla. Exigió pruebas y resultados reales; excluyó temporizadores y ampliaciones prematu-
+ras.
+
+Motivo y resultado. Acotar la primera versión permitió comprobar la mecánica antes de
+ampliarla. Se implementaron estado, conexiones, propagación y giro, además de siete pruebas
+iniciales. La figura 1 muestra la interfaz funcional.
+
+Prompt 02: rediseño visual futurista y mejoras UX
+
+Objetivo y solicitud. Inspeccionar y conservar el MVP, mejorar la jerarquía visual, los
+estados eléctricos, las animaciones, el modal, el teclado y la adaptación responsive, sin agregar
+niveles ni reloj.
+
+Motivo y resultado. El refinamiento abordó la claridad visual sobre una lógica ya verificable.
+Se incorporaron la consola energética, indicadores de conexión, brillo, transiciones y foco
+visible, respetando movimiento reducido. La figura 2 permite comparar el resultado con el
+MVP.
+
+Prompt 03: niveles, temporizador, puntuación y récords
+
+Objetivo y solicitud. Añadir tres tamaños de tablero, soluciones verificadas mediante giros
+legales, reloj basado en tiempo real, puntuación explicable, récords locales, desbloqueo y re-
+sultados de victoria o derrota. Exigió conservar las siete pruebas y comprobar datos corruptos
+y bloqueos.
+
+Motivo y resultado. Sobre la interfaz anterior se amplió la progresión y la repetición de
+partidas. El código contiene tres configuraciones resolubles, una sesión que gestiona el reloj
+y almacenamiento tolerante a fallos. Las figuras 3 y 4 documentan esos cambios.
+
+
+
+
+Reporte académico                                                                              2
+CircuitRush · KODIGO
+
+
+
+3. Iteración y mejora
+
+El registro docs/iteraciones.md relaciona instrucciones, cambios y validaciones. La tabla 1
+sintetiza el alcance acumulativo de las tres etapas.
+
+                           Tabla 1: Evolución de CircuitRush
+Iteración     Mejora principal                     Evidencia
+01            Tablero 4 × 4, BFS, giros, victoria y        Siete pruebas iniciales y captura del
+              reinicio.                                    MVP.
+02            Rediseño, estados eléctricos, animacio-      Capturas Firefox y pruebas de foco y
+              nes, teclado y responsive.                   movimiento reducido.
+03            Niveles, reloj, puntos, récords y desblo-    Diecinueve pruebas y capturas de nive-
+              queo.                                        les y puntuación.
+               Nota. Síntesis del código y del registro de iteraciones del repositorio.
+
+
+Las figuras 1 y 2 muestran el paso de los indicadores básicos a una consola energética. Se
+conservaron fuente, destino y rotación.
+
+
+
+
+Figura 1: MVP: tablero inicial de 16 piezas         Figura 2: Consola rediseñada en la iteración
+                                                    02
+Nota. Capturas propias del repositorio. Se recortan márgenes exteriores para facilitar la comparación
+y se conserva la proporción.
+
+
+
+
+Reporte académico                                                                                  3
+CircuitRush · KODIGO
+
+
+La tercera iteración añade selector, bloqueos y reloj. La figura 3 muestra Reconexión; So-
+brecarga amplía el tablero a 6 × 6. Las pruebas verifican que los tres niveles empiezan sin
+resolver y que una secuencia legal alcanza el destino. No se afirma que esas soluciones sean
+mínimas.
+
+
+
+
+                                                 Figura 4: Victoria con 12 movimientos y 1960
+                                                 puntos
+
+
+Figura 3: Reconexión: tablero 5 × 5, selector
+y reloj
+Nota. Capturas 10 y 13 de Firefox, recortadas sin deformación. Se conserva el tablero completo y
+el modal de resultado. La puntuación mostrada es 1000 + 120(10) − 12(20) = 1960.
+
+
+
+
+Reporte académico                                                                             4
+CircuitRush · KODIGO
+
+
+
+4. Validación del resultado
+
+Resultados actuales. Se ejecutó nuevamente el comando solicitado:
+
+      node --test tests/game.test.cjs
+
+
+Terminó correctamente y resumió 1 archivo aprobado, 0 fallidos y 0 omitidos en
+este entorno. La ejecución complementaria node tests/game.test.cjs detalló 19 prue-
+bas aprobadas, 0 fallidas y 0 omitidas. Se distingue el conteo por archivo del de ca-
+sos. Las salidas son kodigo-node-test.tap y kodigo-node-detalle.tap, en el directorio
+docs/assets/contenido/evidencias/reporte-kodigo/.
+
+La suite verifica giros, movimientos, conexiones recíprocas, ciclos, victoria, bloqueo y reini-
+cio; valida los tres tamaños y sus soluciones mediante giros legales. Con reloj controlado
+comprueba inicio, decremento, parada, reinicio e intervalo único. También cubre puntuación
+no negativa, récords, recarga simulada, datos corruptos, niveles bloqueados y desbloqueo. El
+DOM simulado valida controles; no sustituye un navegador.
+
+Ejecución local. .venv/bin/python app.py sirve el juego en http://127.0.0.1:5000. En
+esta revisión, el cliente Flask obtuvo HTTP 200 para página, CSS y JavaScript; se registró
+en kodigo-flask.txt, en el mismo directorio. No se presenta como una interacción visual
+nueva.
+
+Evidencia histórica y ajuste. Las iteraciones 02 y 03 registran automatización en Fire-
+fox de teclado, victoria, continuación, recarga y movimiento reducido. En la segunda, Tab
+permitía abandonar el botón del modal: se añadió manejo de teclado y la repetición docu-
+mentada aprobó. La tercera amplió ese manejo a la continuación. Otro ajuste fue usar una
+esquina en fila 4, columna 3 para permitir el recorrido; la suite actual verifica su solución de
+12 movimientos.
+
+Alcance y límites. Las mediciones históricas no detectaron desbordamiento a 1366, 768 y
+500 píxeles. Las capturas de 390 usaron una configuración de prueba; la derrota en Firefox
+utilizó reloj inyectado. No se repitió esa automatización al redactar este reporte. No existen
+evidencias de interacción táctil física, lector de pantalla, otros navegadores o suspensión real
+de pestaña por el sistema operativo. Las pruebas temporales simulan retrasos. No se confun-
+den estas comprobaciones automatizadas con pruebas manuales, ni se afirma accesibilidad
+total.
+
+
+Reporte académico                                                                             5
+CircuitRush · KODIGO
+
+
+
+5. Reflexión final
+
+Borrador para revisión personal. Las respuestas siguientes son una propuesta de re-
+dacción, no un testimonio confirmado. El estudiante debe corregirlas o aprobarlas antes de
+entregar y precisar qué código puede explicar por sí mismo.
+
+a. ¿Qué aprendí utilizando IA para programar?
+
+Aprendí a dividir una solicitud en cambios comprobables: primero el circuito, después la
+interfaz y finalmente los niveles y el reloj. Pedir una función no fue suficiente; también
+necesité establecer cómo comprobarla, por ejemplo mediante conexiones recíprocas y una
+secuencia de giros que alcanzara el destino.
+
+b. ¿Qué ventajas y limitaciones identifiqué del vibecoding?
+
+La ventaja que identifico es convertir instrucciones concretas en una implementación y re-
+visarla por etapas. La limitación es que una respuesta o captura no demuestra todo el fun-
+cionamiento. Las pruebas con un reloj simulado ayudan a revisar el vencimiento, pero no
+sustituyen la interacción en un móvil físico ni la revisión del código generado.
+
+c. ¿Qué partes del código comprendo y cuáles necesito reforzar?
+
+Puedo explicar la separación entre Flask, la interfaz y el estado del juego, así como la relación
+entre un giro y el contador. Necesito reforzar BFS, el control del tiempo y la validación del
+almacenamiento. Antes de presentar esta respuesta como definitiva, debo confirmar cuáles
+de estas partes comprendo realmente y demostrarlas con el código.
+
+
+
+
+                                                                  Jaime Berrios
+                                                                                    Jaime Berrios
+
+                                                                         Elaboración del documento
+
+
+
+
+Reporte académico                                                                               6
+

@@ -1,0 +1,11 @@
+\makeatletter
+\newcommand{\cita}[2][]{(\csname autorp@#2\endcsname, \csname anio@#2\endcsname\if\relax\detokenize{#1}\relax\else, #1\fi)}
+\newcommand{\citatexto}[2][]{\csname autorn@#2\endcsname\ (\csname anio@#2\endcsname\if\relax\detokenize{#1}\relax\else, #1\fi)}
+\newcommand{\citas}[1]{(%
+  \def\citassep{}%
+  \@for\@tmp:=#1\do{%
+    \citassep\csname autorp@\@tmp\endcsname,~\csname anio@\@tmp\endcsname%
+    \def\citassep{;~}%
+  }%
+)}
+\makeatother
