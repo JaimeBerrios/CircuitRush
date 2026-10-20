@@ -1,0 +1,10 @@
+{'viewport': [1366, 915], 'overflow': False, 'tiles': 16, 'tile': 144}
+{'viewport': [1366, 915], 'overflow': False, 'tiles': 25, 'tile': 113.19999694824219}
+{'viewport': [1366, 915], 'overflow': False, 'tiles': 36, 'tile': 92.66667175292969}
+{'viewport': [768, 915], 'overflow': False, 'tiles': 16, 'tile': 144}
+{'viewport': [768, 915], 'overflow': False, 'tiles': 25, 'tile': 113.19999694824219}
+{'viewport': [768, 915], 'overflow': False, 'tiles': 36, 'tile': 92.66667175292969}
+{'viewport': [500, 915], 'overflow': False, 'tiles': 16, 'tile': 96}
+{'viewport': [500, 915], 'overflow': False, 'tiles': 25, 'tile': 74.80000305175781}
+{'viewport': [500, 915], 'overflow': False, 'tiles': 36, 'tile': 60.66667175292969}
+PASS: selector, teclado, reloj real, victoria, niveles 2/3, recarga, derrota con reloj inyectado, responsive y movimiento reducido.

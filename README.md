@@ -1,6 +1,6 @@
 # CircuitRush: Restaura la Energía
 
-Segunda iteración del minijuego individual de «Vibecoding Guiado» de KODIGO Academy, AI for Developers Jr. 3. Conecta la fuente ⚡ con el destino ◎ girando las piezas de un tablero fijo de 4 × 4. Sin servicios externos, cuentas ni base de datos.
+Tercera iteración del minijuego individual de «Vibecoding Guiado» de KODIGO Academy, AI for Developers Jr. 3. Conecta la fuente ⚡ con el destino ◎ girando las piezas de tres tableros fijos de 4 × 4, 5 × 5 y 6 × 6. Sin servicios externos, cuentas ni base de datos.
 
 ## Ejecutar localmente
 
@@ -17,14 +17,26 @@ Abre http://127.0.0.1:5000. Detén el servidor con Ctrl+C. La instalación inici
 
 ## Jugar
 
-Haz clic o usa Tab y Enter/Espacio sobre las piezas. Cada giro horario de 90° suma un movimiento. La fuente amarilla y el destino marcado con un círculo son fijos. Las conexiones con energía se iluminan en cian. Solo se transmite energía cuando coinciden los extremos de ambas piezas. Al ganar, el tablero se bloquea y aparece un modal con los movimientos reales. «Jugar nuevamente» restaura la configuración original; Esc cierra el modal y permite usar «Reiniciar partida».
+Haz clic o usa Tab y Enter/Espacio sobre las piezas. Cada giro horario de 90° suma un movimiento. La fuente amarilla y el destino marcado con un círculo son fijos. Las conexiones recíprocas con energía se iluminan en cian.
+
+| Nivel | Tablero | Tiempo |
+| --- | --- | --- |
+| 01 — Encendido | 4 × 4 | 120 s |
+| 02 — Reconexión | 5 × 5 | 180 s |
+| 03 — Sobrecarga | 6 × 6 | 240 s |
+
+El reloj comienza con la primera rotación válida. El tiempo sigue transcurriendo al cambiar de pestaña: se calcula con tiempo real transcurrido, no contando callbacks. Al llegar a cero, las piezas se bloquean y el modal permite reintentar. Reiniciar o cambiar de nivel cancela el reloj anterior.
+
+Completa un nivel para desbloquear el siguiente. Puedes repetir cualquiera desbloqueado desde el selector. Al ganar, el modal muestra movimientos, segundos restantes, puntuación, mejor récord y las opciones de repetir o continuar. Esc cierra el resultado; «Reiniciar partida» permite volver a jugar.
+
+**Puntuación por victoria:** `máximo(0, 1000 + segundos restantes × 10 − movimientos × 20)`. Una derrota no otorga puntos. Los segundos son enteros mostrados por el reloj al resolver. No hay suma acumulada entre niveles. En `localStorage`, clave `circuitrush-v1`, se guardan por separado la mayor puntuación, el menor número de movimientos y el último nivel desbloqueado. Recargar conserva las marcas, pero comienza una partida nueva en el nivel 01. Las marcas dependen del navegador y del origen (host/puerto); borrar sus datos las elimina. Si el almacenamiento falla, puedes jugar y conservar marcas durante esa sesión.
 
 ## Archivos y lógica
 
 - `app.py`: instancia Flask y ruta GET `/`.
 - `templates/index.html`: interfaz, tablero y estados accesibles.
 - `static/css/style.css`: piezas con CSS local, colores, cuadrícula adaptable y transición de rotación.
-- `static/js/game.js`: nivel, funciones puras y adaptación al DOM.
+- `static/js/game.js`: configuraciones, propagación, sesión con reloj, récords y adaptación al DOM.
 - `tests/game.test.cjs`: pruebas sin paquetes adicionales, mediante Node.
 - `docs/iteraciones.md`: decisiones, resultados y validaciones pendientes.
 
@@ -53,12 +65,14 @@ Solución reproducible desde el inicio (fila y columna empiezan en 1):
 
 Esta secuencia gana en 12 movimientos; no se afirma que sea la solución mínima.
 
-Validación de Iteración 02: siete pruebas Node aprobadas, Flask real con HTTP 200 y comprobaciones en Firefox de teclado, modal, reinicio, clics rápidos y movimiento reducido. Capturas reales en `docs/assets/contenido/evidencias/iteracion-02/`; consultar su README para alcance y pendientes. El Prompt 01 y el Prompt 02 están en `docs/datos/info.md`.
+Validación de Iteración 03: **19 pruebas Node aprobadas**, conservando las siete originales. Comprueban soluciones mediante giros legales en los tres niveles, reloj controlado, puntuación, almacenamiento, progresión y DOM. Flask devuelve HTTP 200 para la página, CSS y JavaScript. En Firefox real se verificaron teclado, reloj, victoria, desbloqueo, recarga, derrota con reloj inyectado, los tres tamaños y movimiento reducido. Sin desbordamiento horizontal a 1366, 768 y 500 px. La captura de 390 px es una revisión visual con fixture de selección; no demuestra interacción táctil.
 
-Pendiente: interacción táctil en dispositivos físicos, revisión con lector de pantalla y compatibilidad en otros navegadores. La captura de 390 × 844 valida la presentación móvil; la automatización de interacción se ejecutó en escritorio.
+Los dos tableros nuevos se construyen a partir de rutas serpentinas fijas, sin aleatoriedad. El área y la longitud del recorrido crecen; `CircuitRush.LEVELS` contiene una secuencia reproducible de giros por nivel. Las pruebas confirman que empiezan sin resolver y que esas rotaciones alcanzan el destino. No se afirma que sean soluciones mínimas. La ruta del nivel 01 y su secuencia anterior se conservan.
+
+Evidencias y límites de verificación: `docs/assets/contenido/evidencias/iteracion-03/README.md`. Historial y los tres prompts íntegros en `docs/iteraciones.md` y `docs/datos/info.md`. Pendientes: móvil físico, lector de pantalla y otros navegadores. La sesión no se guarda; no hay cuentas ni sincronización entre equipos.
 
 ## Control de versiones
 
 El código está preparado para Git con `.gitignore` para el entorno virtual y cachés. No se realizan commits ni pushes automáticamente. Node se usa solo para las pruebas; el juego requiere Python/Flask y un navegador con JavaScript.
 
-Esta entrega incorpora el rediseño visual y las mejoras UX de la Iteración 02. No incluye niveles adicionales, sonido, temporizador, puntuaciones avanzadas ni IA integrada.
+Esta entrega conserva el diseño de la Iteración 02 e incorpora únicamente la jugabilidad de la Iteración 03. No se ha iniciado una cuarta iteración.

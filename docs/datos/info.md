@@ -682,3 +682,332 @@ No avances a la Iteración 03.
 No introduzcas sobreingeniería.
 
 **Comienza inspeccionando el proyecto existente y ejecuta únicamente la Iteración 02.**
+
+# PROMPT 03 — CIRCUITRUSH: NIVELES PROGRESIVOS, TEMPORIZADOR Y SISTEMA DE PUNTUACIÓN
+
+## 1. Rol y contexto
+
+Actúa como desarrollador full-stack senior especializado en Python, Flask, JavaScript Vanilla, HTML5, CSS3 y videojuegos web interactivos.
+
+Continuaremos el desarrollo de **CircuitRush: Restaura la Energía**, proyecto académico del bootcamp AI for Developers Jr. 3 de KODIGO Academy.
+
+El proyecto utiliza Python, Flask, HTML, CSS y JavaScript, y cuenta con dos iteraciones completadas:
+
+- **Iteración 01:** tablero funcional, rotación de piezas, propagación eléctrica, victoria y reinicio.
+- **Iteración 02:** rediseño visual futurista, efectos de iluminación, animaciones, interfaz responsive y mejoras de accesibilidad.
+
+El código se encuentra versionado mediante Git y GitHub.
+
+El objetivo de esta tercera iteración es ampliar la jugabilidad incorporando niveles progresivos, temporizador, puntuación y récords locales.
+
+**Restricción principal:** conservar la identidad visual y las funcionalidades existentes. No reconstruir el proyecto.
+
+## 2. Inspección inicial obligatoria
+
+Antes de modificar el código:
+
+1. Examina la estructura actual.
+2. Lee `README.md`, `docs/datos/info.md` y `docs/iteraciones.md`.
+3. Inspecciona los archivos HTML, CSS y JavaScript.
+4. Identifica las funciones actuales de rotación, propagación eléctrica, victoria y reinicio.
+5. Examina las pruebas automatizadas existentes en `tests/game.test.cjs`.
+6. Ejecuta las pruebas actuales para establecer una línea base.
+
+No elimines ni reemplaces pruebas existentes sin una justificación técnica.
+
+## 3. Sistema de niveles
+
+Implementar tres niveles:
+
+| Nivel | Tablero | Tiempo inicial |
+|---|---|---|
+| 01 — Encendido | 4×4 | 120 segundos |
+| 02 — Reconexión | 5×5 | 180 segundos |
+| 03 — Sobrecarga | 6×6 | 240 segundos |
+
+Cada nivel debe tener una configuración reproducible y una solución válida.
+
+### Requisitos
+
+- Mantener el nivel 01 existente siempre que sea posible.
+- Crear dos nuevos tableros.
+- Adaptar dinámicamente la cuadrícula.
+- Incrementar progresivamente la dificultad.
+- Evitar configuraciones imposibles.
+- Mantener las piezas dentro de los límites del tablero.
+- Bloquear inicialmente los niveles posteriores.
+- Desbloquear el siguiente nivel al completar el anterior.
+- Permitir repetir niveles desbloqueados.
+
+La fuente y el destino deben identificarse claramente.
+
+**Importante:** implementar una comprobación automatizada que confirme que cada tablero es resoluble mediante rotaciones válidas.
+
+No generar tableros aleatorios en esta iteración.
+
+## 4. Temporizador
+
+Implementar una cuenta regresiva visible.
+
+### Comportamiento
+
+- El temporizador comienza con la primera rotación válida.
+- Se actualiza cada segundo.
+- Se detiene al ganar.
+- Se detiene al perder.
+- Se reinicia al reiniciar el nivel.
+- No debe crear múltiples intervalos simultáneos.
+- No debe continuar ejecutándose al cambiar de nivel.
+
+Cuando llegue a cero:
+
+- Bloquear las piezas.
+- Mostrar el mensaje «Tiempo agotado».
+- Mostrar los movimientos realizados.
+- Permitir reintentar el nivel.
+
+Utilizar un cálculo basado en tiempo transcurrido real para evitar acumulación de errores por retrasos de los intervalos.
+
+Si el usuario cambia de pestaña, el tiempo debe seguir transcurriendo mientras la partida esté activa.
+
+## 5. Sistema de puntuación
+
+Implementar una puntuación sencilla y explicable.
+
+Fórmula propuesta:
+
+Puntuación = máximo entre 0 y (1000 + segundos restantes × 10 − movimientos × 20).
+
+Requisitos:
+
+- Calcular únicamente al completar un nivel.
+- No otorgar puntos al perder.
+- Mostrar el resultado en la pantalla de victoria.
+- Evitar puntuaciones negativas.
+- Mantener una puntuación individual por nivel.
+- Evitar duplicar puntuaciones cuando se active repetidamente la condición de victoria.
+
+Documentar claramente la fórmula.
+
+## 6. Sistema de récords
+
+Utilizar `localStorage` del navegador.
+
+Guardar:
+
+- Mejor puntuación por nivel.
+- Menor cantidad de movimientos por nivel.
+- Niveles desbloqueados.
+
+Requisitos:
+
+- Mantener los récords al recargar la página.
+- Actualizarlos únicamente cuando se supere una marca.
+- Validar los datos recuperados.
+- Manejar correctamente datos ausentes o corruptos.
+- Evitar que un error de almacenamiento impida jugar.
+
+No implementar cuentas, servidores de almacenamiento ni bases de datos.
+
+## 7. Selección de niveles
+
+Incorporar una sección visual para seleccionar niveles.
+
+Debe mostrar:
+
+- Número y nombre del nivel.
+- Estado bloqueado o desbloqueado.
+- Mejor puntuación.
+- Indicador del nivel seleccionado.
+
+Reutilizar la identidad visual futurista.
+
+Los niveles bloqueados no deben poder iniciarse mediante la interfaz ni mediante llamadas normales a las funciones de selección.
+
+## 8. Pantallas de resultado
+
+### Victoria
+
+Mostrar:
+
+- Nivel completado.
+- Movimientos.
+- Tiempo restante.
+- Puntuación obtenida.
+- Mejor récord.
+- Botón para continuar al siguiente nivel, cuando exista.
+- Botón para repetir el nivel.
+
+### Derrota
+
+Mostrar:
+
+- Mensaje «Tiempo agotado».
+- Nivel actual.
+- Movimientos realizados.
+- Botón «Reintentar».
+
+Los resultados deben utilizar el sistema visual de modales desarrollado en la Iteración 02.
+
+Evitar modales duplicados.
+
+## 9. Diseño visual y responsive
+
+Conservar la estética futurista actual:
+
+- Fondo azul oscuro.
+- Circuitos cian.
+- Fuente amarilla.
+- Indicadores luminosos.
+- Paneles compactos.
+- Animaciones suaves.
+
+Adaptar los tableros 5×5 y 6×6 para que sigan siendo utilizables en dispositivos móviles.
+
+No introducir desplazamiento horizontal.
+
+Respetar `prefers-reduced-motion`.
+
+Mantener controles accesibles mediante teclado.
+
+No introducir bibliotecas visuales externas.
+
+## 10. Arquitectura y calidad
+
+Mantener Flask como servidor de la aplicación y JavaScript como responsable de la lógica interactiva.
+
+Si el crecimiento del código lo justifica, separar responsabilidades en módulos JavaScript pequeños.
+
+No realizar una refactorización general innecesaria.
+
+Priorizar funciones claras para:
+
+- Cargar niveles.
+- Validar configuraciones.
+- Rotar piezas.
+- Propagar energía.
+- Controlar el temporizador.
+- Calcular puntuaciones.
+- Gestionar récords.
+- Cambiar de nivel.
+- Reiniciar partidas.
+
+Evitar dependencias adicionales.
+
+## 11. Pruebas obligatorias
+
+Conservar las siete pruebas existentes y adaptarlas únicamente cuando los cambios funcionales lo requieran.
+
+Agregar pruebas para comprobar:
+
+1. El nivel 01 conserva un tablero válido de 16 piezas.
+2. El nivel 02 contiene 25 piezas.
+3. El nivel 03 contiene 36 piezas.
+4. Todos los niveles tienen al menos una solución.
+5. Los niveles comienzan sin resolverse.
+6. El temporizador no comienza antes del primer movimiento.
+7. El temporizador disminuye correctamente.
+8. El temporizador se detiene al ganar.
+9. El temporizador se detiene al perder.
+10. El tiempo agotado bloquea la interacción.
+11. Reiniciar restaura el tiempo inicial.
+12. No existen intervalos duplicados.
+13. La puntuación coincide con la fórmula.
+14. La puntuación nunca es negativa.
+15. Los récords se actualizan correctamente.
+16. Los récords persisten al recargar.
+17. Los datos corruptos de almacenamiento se manejan sin errores críticos.
+18. Los niveles bloqueados no pueden iniciarse.
+19. Completar un nivel desbloquea el siguiente.
+20. La interfaz funciona en escritorio y móvil.
+
+No declares aprobadas pruebas que no hayan sido ejecutadas.
+
+Documenta resultados reales y limitaciones de verificación.
+
+## 12. Documentación académica
+
+La actividad de KODIGO evalúa:
+
+- Funcionamiento: 2.5 puntos.
+- Uso estratégico de IA: 2.5 puntos.
+- Iteración y mejora: 3 puntos.
+- Comprensión y validación: 2 puntos.
+
+Actualizar `docs/iteraciones.md` con:
+
+**Iteración 03 — Ampliación de jugabilidad**
+
+Incluir:
+
+1. Objetivo.
+2. Justificación de las nuevas funcionalidades.
+3. Prompt utilizado.
+4. Archivos modificados.
+5. Cambios funcionales.
+6. Pruebas ejecutadas.
+7. Resultados obtenidos.
+8. Errores reales encontrados.
+9. Correcciones aplicadas.
+10. Limitaciones pendientes.
+
+En `docs/datos/info.md`, incorporar íntegramente este Prompt 03, conservando los anteriores y su orden cronológico.
+
+Actualizar el README con las instrucciones de juego y las nuevas funcionalidades.
+
+No inventar resultados ni reflexiones personales.
+
+## 13. Evidencias
+
+Crear o utilizar la carpeta:
+
+`docs/assets/contenido/evidencias/iteracion-03/`
+
+Evidencias sugeridas:
+
+- Captura 09: selector de niveles.
+- Captura 10: nivel 02 con tablero 5×5.
+- Captura 11: nivel 03 con tablero 6×6.
+- Captura 12: temporizador en funcionamiento.
+- Captura 13: pantalla de victoria con puntuación.
+- Captura 14: pantalla de derrota.
+- Captura 15: resultados de pruebas automatizadas.
+
+Generar capturas únicamente si existen herramientas disponibles para hacerlo realmente.
+
+Si no puedes capturarlas, indicar cuáles debo obtener manualmente.
+
+## 14. Metodología de ejecución
+
+Trabaja en cuatro fases:
+
+**Fase A — Análisis:** inspeccionar el código y ejecutar pruebas de referencia.
+
+**Fase B — Implementación:** incorporar niveles, temporizador, puntuación y récords.
+
+**Fase C — Validación:** ejecutar pruebas y corregir errores reales.
+
+**Fase D — Documentación:** actualizar README, info.md e iteraciones.md y registrar evidencias.
+
+Al finalizar, entregar un resumen técnico con:
+
+- Funcionalidades implementadas.
+- Archivos modificados.
+- Pruebas ejecutadas y resultados.
+- Errores corregidos.
+- Evidencias generadas.
+- Limitaciones conocidas.
+- Instrucciones para ejecutar y probar la aplicación.
+
+## 15. Restricciones finales
+
+- No reconstruir el proyecto.
+- No alterar innecesariamente el diseño de la Iteración 02.
+- No utilizar frameworks adicionales.
+- No incorporar bases de datos.
+- No introducir funcionalidades ajenas al alcance.
+- No realizar commits ni pushes automáticamente.
+- No avanzar hacia una cuarta iteración sin autorización.
+- Priorizar claridad, estabilidad y comprensión del código.
+
+**Comienza analizando el proyecto existente y desarrolla exclusivamente la Iteración 03.**

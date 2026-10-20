@@ -118,3 +118,82 @@ Capturas 05 (tres tamaños), 06 (parcial), 07 (victoria) y 08 (móvil) en `asset
 ### Limitaciones pendientes
 
 Revisión táctil en móvil/tablet físicos, lector de pantalla, otros navegadores y valoración humana de suavidad durante clics rápidos. La captura móvil no acredita interacción táctil ni medición automática del desbordamiento a 390 px. Las instrucciones inferiores requieren desplazamiento vertical en pantallas bajas. No se hizo una auditoría completa de contraste WCAG. No se atribuye ninguna reflexión personal al estudiante ni se regeneraron los PDF académicos de ejemplo.
+
+## Iteración 03 — Ampliación de jugabilidad (2026-10-20)
+
+### 1. Objetivo
+
+Extender el juego existente con tres niveles progresivos, cuenta regresiva, puntuación por victoria y récords locales. Se conservaron Flask, JavaScript Vanilla, las piezas CSS, la estética futurista y el nivel 01 original. No se implementó una cuarta iteración ni se realizaron commits o pushes.
+
+### 2. Justificación
+
+El selector permite progresar y repetir sectores; el incremento de tamaño y longitud del recorrido añade dificultad reproducible. El reloj limita cada intento y la fórmula visible permite entender cómo tiempo y movimientos afectan al resultado. Los récords ofrecen una referencia local sin cuentas ni infraestructura adicional. Estas son decisiones técnicas de implementación, no reflexiones personales atribuidas al estudiante.
+
+### 3. Prompt utilizado
+
+**PROMPT 03 — CIRCUITRUSH: NIVELES PROGRESIVOS, TEMPORIZADOR Y SISTEMA DE PUNTUACIÓN**, conservado íntegramente en `datos/info.md` después de los Prompts 01 y 02. Ya estaba incorporado como modificación previa al iniciar este trabajo; se verificó su presencia y se conservó sin duplicarlo. Las cuatro fases solicitadas fueron análisis del código y línea base, implementación incremental, validación y documentación.
+
+### 4. Archivos modificados
+
+- `../static/js/game.js`: configuración de niveles, BFS adaptable, sesión, reloj, fórmula, almacenamiento y DOM.
+- `../templates/index.html`: selector, reloj, etiquetas dinámicas y controles del resultado.
+- `../static/css/style.css`: adaptación de paneles y selector, casillas móviles y derrota.
+- `../tests/game.test.cjs`: se conservaron las siete pruebas originales sin eliminarlas; se añadieron doce.
+- `../tests/browser-smoke.py`: prueba reproducible con el protocolo Marionette de Firefox, usando solo la biblioteca estándar de Python.
+- `../README.md`, este registro y evidencias en `assets/contenido/evidencias/iteracion-03/`.
+
+No se modificaron `app.py`, dependencias, entregables LaTeX ni presentaciones de la plantilla académica incluida. Esta entrega se limita al juego y su documentación solicitada.
+
+### 5. Cambios funcionales
+
+| Sector | Dimensión | Tiempo inicial |
+| --- | --- | --- |
+| Encendido | 4 × 4 | 120 s |
+| Reconexión | 5 × 5 | 180 s |
+| Sobrecarga | 6 × 6 | 240 s |
+
+El nivel 01 conserva exactamente sus piezas y su solución de 12 movimientos. Los otros tableros se construyen mediante rutas serpentinas fijas; no usan números aleatorios. Cada configuración incluye un testigo de solución en `LEVELS.solution`. Las pruebas aplican rotaciones legales hasta energizar el destino, sin reemplazar piezas para simular una victoria. No se afirma que los testigos sean soluciones mínimas.
+
+`createGame` carga niveles; `connections`, `propagate` y `rotate` conservan la lógica eléctrica con límites dinámicos; `createSession` gestiona selección autorizada, reloj y resultados; `readRecords` y `saveWin` validan y guardan marcas. `mount` adapta la interfaz. No se introdujo una refactorización general ni nuevas dependencias.
+
+El reloj comienza con el primer giro válido, usa `performance.now()` y resta segundos transcurridos reales. Un intervalo actualiza la vista; las rotaciones y `visibilitychange` también comprueban vencimiento. Ganar, perder, reiniciar o seleccionar otro nivel cancelan el intervalo anterior. Al volver de una pestaña suspendida, la primera comprobación incluye todo el tiempo transcurrido.
+
+La fórmula es **máximo(0, 1000 + segundos restantes × 10 − movimientos × 20)**, calculada una sola vez al ganar. La derrota no puntúa. Cada nivel guarda su mejor puntuación y menor número de movimientos de forma independiente, aunque esas marcas provengan de partidas distintas. `localStorage` usa `circuitrush-v1`; entradas inválidas se descartan y excepciones no impiden jugar. Solo se guardan récords y desbloqueos, no partidas en curso. Los bloqueos se validan en la interfaz y en `session.select`, no solo mediante CSS.
+
+Un único modal nativo muestra victoria o derrota; se evita reabrirlo por actualizaciones repetidas. El foco de Tab contempla los dos botones de victoria. Los botones del selector se conservan entre actualizaciones para evitar perder el foco al avanzar el reloj.
+
+### 6. Pruebas ejecutadas
+
+| Comprobación | Resultado real |
+| --- | --- |
+| Línea base `node tests/game.test.cjs` | 7 aprobadas, 0 fallos. |
+| Suite ampliada, mismo comando | 19 aprobadas, 0 fallos; salida TAP guardada. |
+| Tamaños y soluciones | 16, 25 y 36 piezas, inicialmente sin resolver, soluciones legales aprobadas en los tres niveles. |
+| Reloj controlado | Inicio válido, tiempo real con callbacks retrasados, intervalo único, parada por victoria/derrota/cambio, reinicio y bloqueo al vencer aprobados. |
+| Puntuación y almacenamiento | Fórmula, mínimo cero, cálculo único, récords independientes, recarga simulada, JSON corrupto y excepciones de lectura/escritura aprobados. |
+| Progresión y DOM | Selección bloqueada rechazada, desbloqueo sucesivo, cuadrícula dinámica, derrota única, reintento y conservación de botones del selector aprobados. |
+| Python | `python3 -m py_compile app.py tests/browser-smoke.py` aprobado tras corregir el script auxiliar. |
+| Cliente Flask del entorno virtual | GET `/`, CSS y JavaScript: HTTP 200. |
+| Firefox real / `tests/browser-smoke.py` | Selector bloqueado, Enter/Espacio, reloj tras espera real, victoria de 1960 puntos en nivel 01, continuación a 25/36 piezas, recarga con récords y desbloqueos, derrota con reloj inyectado y movimiento reducido aprobados. |
+| Responsive Firefox | Los tres tableros sin desbordamiento horizontal en viewports de 1366 × 915, 768 × 915 y 500 × 915. |
+| Capturas a 390 px de ancho | Revisión visual real de cada nivel con la plantilla actual y fixture de selección. Sin validación táctil ni aserciones DOM a ese ancho. |
+
+La derrota de navegador se aceleró inyectando un reloj en una sesión de prueba; no se esperaron dos minutos ni se cambió el tiempo inicial de producción. Las pruebas Node usan reloj e intervalos controlados para demostrar casos límite. La prueba real de pestaña oculta queda pendiente; su comportamiento temporal se valida mediante retraso simulado y cálculo real transcurrido.
+
+### 7. Resultados obtenidos
+
+Las siete pruebas originales continúan aprobadas, incluidos energía recíproca, ciclos, giro acumulado, solución y reinicio. Las nuevas comprobaciones confirman los tres tableros y el ciclo de partida completo. Se generaron capturas reales 09–15, capturas móviles adicionales y registros de resultados. La carpeta de evidencias identifica alcance y método de cada una.
+
+### 8. Errores reales encontrados
+
+El sandbox impidió abrir sockets. Fuera del sandbox, el puerto 5000 estaba ocupado por un servidor anterior cuya plantilla en caché no contenía el selector. Esto produjo una aserción fallida de interfaz, no un fallo de desbloqueo. Una espera inicial de 1.2 s no alcanzó a observar el refresco del reloj. Marionette impuso un mínimo de 500 px aunque se solicitaran 390. El modo screenshot requirió crear previamente su carpeta de perfil.
+
+Al guardar el script auxiliar de navegador, una sustitución introdujo un paréntesis sobrante; la comprobación sintáctica lo detectó. Otro comando de generación de fixtures usó el Python del sistema sin Flask y falló con `ModuleNotFoundError`.
+
+### 9. Correcciones aplicadas
+
+Se solicitó permiso técnico para sockets/Firefox, se inició la versión actual en el puerto 5001 y se repitieron las pruebas contra ese proceso. Se dio margen de 2.2 s al muestreo del reloj. Para 390 px se utilizó el modo screenshot de Firefox con fixtures de selección, sin presentar esas capturas como pruebas de interacción. Se creó el perfil temporal, se corrigió el paréntesis y se ejecutó la generación de plantillas con `.venv/bin/python`. La revisión visual detectó además que el texto de sector seguía fijo en 01; ahora cambia junto con el nivel y la derrota usa el acento amarillo del diseño.
+
+### 10. Limitaciones pendientes
+
+Pruebas táctiles en equipos físicos, lector de pantalla, otros navegadores, pestaña realmente suspendida por el sistema operativo y revisión humana de la dificultad. Las soluciones son testigos válidos, no óptimos. Las capturas móviles usan una altura ampliada para mostrar el tablero completo; en teléfonos bajos se requiere desplazamiento vertical. No se afirma cumplimiento total de WCAG. Los datos locales pueden editarse desde herramientas del navegador: no existe un sistema competitivo ni antitrampas. No se inventaron reflexiones del estudiante ni se regeneraron los PDF de ejemplo fuera del alcance solicitado.

@@ -90,3 +90,128 @@ test('rechaza tableros o piezas inválidos', () => {
   assert.throws(() => propagate([]), TypeError);
   assert.throws(() => connections({ type: 'unknown', rotation: 0 }), TypeError);
 });
+
+const { LEVELS, createSession, score, readRecords, saveWin } = require('../static/js/game.js');
+function memoryStorage() {
+  let value = null;
+  return {getItem: () => value, setItem: (_, next) => { value = next; }};
+}
+function clockSession(storage = memoryStorage()) {
+  let time = 0, serial = 0;
+  const jobs = new Map();
+  const session = createSession({storage, now: () => time,
+    setInterval: fn => { jobs.set(++serial, fn); return serial; }, clearInterval: id => jobs.delete(id)});
+  return {session, jobs, advance(ms) { time += ms; for (const fn of [...jobs.values()]) fn(); }};
+}
+function complete(session) {
+  for (const [index, turns] of LEVELS[session.game.levelId - 1].solution)
+    for (let i = 0; i < turns && !session.game.won; i++) session.rotate(index);
+  assert.equal(session.game.won, true);
+}
+for (const level of LEVELS) {
+  test(`nivel ${level.id}: ${level.size ** 2} piezas, sin resolver y solución mediante giros válidos`, () => {
+    const game = createGame(level.id);
+    assert.equal(game.pieces.length, level.size ** 2);
+    assert.equal(propagate(game.pieces).won, false);
+    for (const [index, turns] of level.solution) {
+      assert.ok(index >= 0 && index < game.pieces.length);
+      for (let i = 0; i < turns && !game.won; i++) assert.equal(rotate(game, index), true);
+    }
+    assert.equal(game.won, true);
+    assert.deepEqual(createGame(level.id), createGame(level.id));
+  });
+}
+test('reloj inactivo antes del primer giro válido, decremento real y un solo intervalo', () => {
+  const {session, jobs, advance} = clockSession();
+  advance(5000); assert.equal(session.game.remaining, 120); assert.equal(jobs.size, 0);
+  session.rotate(0); assert.equal(jobs.size, 0);
+  session.rotate(1); session.rotate(2); assert.equal(jobs.size, 1);
+  advance(3100); assert.equal(session.game.remaining, 117);
+  advance(1200); assert.equal(session.game.remaining, 116);
+  session.restart(); assert.equal(jobs.size, 0); assert.equal(session.game.remaining, 120);
+  advance(10000); assert.equal(session.game.remaining, 120);
+});
+test('ganar detiene el reloj, calcula puntos una sola vez y desbloquea', () => {
+  const {session, jobs, advance} = clockSession();
+  session.rotate(2); advance(2200); complete(session);
+  assert.equal(jobs.size, 0); assert.equal(session.game.remaining, 118);
+  assert.equal(session.game.score, score(118, session.game.moves));
+  const points = session.game.score;
+  assert.equal(session.rotate(1), false); advance(5000);
+  assert.equal(session.game.score, points); assert.equal(session.game.remaining, 118);
+  assert.equal(session.records.unlocked, 2);
+  assert.equal(session.select(2), true); assert.equal(session.game.remaining, 180);
+});
+test('agotamiento detiene reloj, bloquea giros y no concede puntos', () => {
+  const {session, jobs, advance} = clockSession();
+  session.rotate(1); advance(121000);
+  assert.equal(session.game.lost, true); assert.equal(session.game.remaining, 0); assert.equal(jobs.size, 0);
+  assert.equal(session.rotate(1), false); assert.equal(session.game.moves, 1); assert.equal(session.game.score, null);
+  assert.deepEqual(session.records.best, {});
+  session.restart(); assert.equal(session.game.lost, false); assert.equal(session.game.remaining, 120);
+});
+test('un giro tras una pestaña suspendida comprueba el vencimiento antes de mover', () => {
+  let time = 0;
+  const session = createSession({now: () => time, setInterval: () => 1, clearInterval() {}});
+  session.rotate(1); time = 120000;
+  assert.equal(session.rotate(1), false); assert.equal(session.game.moves, 1); assert.equal(session.game.lost, true);
+});
+test('cambiar nivel cancela el intervalo y los niveles bloqueados no se seleccionan', () => {
+  const {session, jobs} = clockSession();
+  for (const id of [2,3,0,4,1.5,'1',NaN]) assert.equal(session.select(id), false);
+  complete(session); session.restart(); session.rotate(1); assert.equal(jobs.size, 1);
+  assert.equal(session.select(2), true); assert.equal(jobs.size, 0); assert.equal(session.game.startedAt, null);
+  assert.equal(session.select(3), false);
+  complete(session); assert.equal(session.records.unlocked, 3); assert.equal(session.select(3), true);
+});
+test('fórmula explicable, cero mínimo', () => {
+  assert.equal(score(100, 12), 1760); assert.equal(score(0, 1000), 0);
+});
+test('récords independientes solo mejoran y persisten al recargar', () => {
+  const storage = memoryStorage(), records = readRecords(storage);
+  saveWin(records, {won: true, score: 1500, moves: 20, levelId: 1}, storage);
+  saveWin(records, {won: true, score: 1400, moves: 25, levelId: 1}, storage);
+  assert.deepEqual(records.best[1], {score:1500,moves:20});
+  saveWin(records, {won: true, score: 1600, moves: 22, levelId: 1}, storage);
+  saveWin(records, {won: true, score: 1300, moves: 18, levelId: 1}, storage);
+  assert.deepEqual(records.best[1], {score:1600,moves:18});
+  assert.deepEqual(createSession({storage}).records, records);
+});
+test('datos corruptos, inválidos y almacenamiento rechazado no impiden jugar', () => {
+  for (const value of [null,'{','null','[]','{"unlocked":99,"best":{"1":{"score":-1,"moves":0}}}', '{"unlocked":"3"}']) {
+    assert.deepEqual(readRecords({getItem: () => value}), {unlocked:1,best:{}});
+  }
+  const storage = {getItem() { throw Error('denegado'); }, setItem() { throw Error('cuota'); }};
+  const {session} = clockSession(storage); complete(session); assert.equal(session.records.unlocked, 2);
+});
+
+test('DOM: tamaños dinámicos, selector protegido, derrota única, reintento y foco del selector estable', () => {
+  class Element {
+    constructor() { this.children=[]; this.events={}; this.style={}; this.attributes={}; this.classList={toggle(){}}; this.wires={style:{}}; this.opens=0; }
+    appendChild(child) { this.children.push(child); }
+    replaceChildren() { this.children=[]; }
+    addEventListener(type, action) { this.events[type]=action; }
+    querySelector() { return this.wires; }
+    setAttribute(key, value) { this.attributes[key]=value; }
+    focus() {}
+    showModal() { this.open=true; this.opens++; }
+    close() { this.open=false; this.events.close?.(); }
+    click() { if (!this.disabled) this.events.click?.(); }
+  }
+  const ids=Object.fromEntries(['board','moves','status','victory','restart','victory-detail','play-again','levels','timer','next-level','victory-title'].map(id=>[id,new Element()]));
+  let time=0;
+  const session=mount({getElementById:id=>ids[id],createElement:()=>new Element()}, {now:()=>time,setInterval:()=>1,clearInterval(){},storage:memoryStorage()});
+  ids.levels.children[1].click(); assert.equal(session.game.levelId,1);
+  for(const [index,turns] of solution) for(let i=0;i<turns;i++) ids.board.children[index].click();
+  assert.equal(ids.victory.opens,1); session.tick(); assert.equal(ids.victory.opens,1);
+  ids['next-level'].click(); assert.equal(ids.board.children.length,25);
+  assert.equal(ids.board.style.gridTemplateColumns,'repeat(5, minmax(0, 1fr))');
+  const selectorButton=ids.levels.children[1];
+  ids.board.children[1].click(); time=181000; session.tick();
+  assert.equal(ids.levels.children[1],selectorButton);
+  assert.equal(ids.victory.opens,2); assert.equal(ids['victory-title'].textContent,'Tiempo agotado');
+  assert.ok(ids.board.children.every(button=>button.disabled));
+  session.tick(); assert.equal(ids.victory.opens,2);
+  ids['play-again'].click(); assert.equal(ids.timer.textContent,'3:00'); assert.equal(session.game.lost,false);
+  complete(session); ids['next-level'].click(); assert.equal(ids.board.children.length,36);
+});
