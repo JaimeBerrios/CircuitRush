@@ -3,29 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#091322">
+  <meta name="theme-color" content="#080F1E">
   <title>CircuitRush — Restaura la Energía</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <script defer src="{{ url_for('static', filename='js/game.js') }}"></script>
 </head>
 <body>
   <main class="game">
-    <header>
-      <p class="eyebrow">RED URBANA / SECTOR 01</p>
-      <h1>Circuit<span>Rush</span></h1>
-      <h2>Restaura la Energía</h2>
-      <p class="instructions">La ciudad está a oscuras. Gira las piezas para conectar la fuente <strong>⚡</strong> con el destino <strong>◎</strong>.</p>
+    <header class="header">
+      <div class="brand"><span class="brand-icon" aria-hidden="true">⚡</span><div><h1>Circuit<span>Rush</span></h1><p class="subtitle">Restaura la Energía</p></div></div>
+      <span class="level-badge">NIVEL <strong>01</strong></span>
     </header>
+    <section class="mission" aria-labelledby="mission-title"><p class="eyebrow">RED URBANA / SECTOR 01</p><h2 id="mission-title">Devuelve la luz a la ciudad.</h2><p>Un circuito. Una conexión que lo cambia todo.</p></section>
     <section class="dashboard" aria-label="Estado de la partida">
       <div><span class="caption">MOVIMIENTOS</span><strong id="moves">0</strong></div>
-      <div><span class="caption">CONEXIÓN</span><strong id="status" role="status">Preparando tablero…</strong></div>
+      <div class="energy-stat"><span class="caption">ESTADO ENERGÉTICO</span><strong id="status" role="status" aria-live="polite">Preparando tablero…</strong></div>
+      <div><span class="caption">NIVEL ACTUAL</span><strong class="level-value">01 <small>/ INICIAL</small></strong></div>
     </section>
-    <div class="board-frame"><div id="board" class="board" role="group" aria-label="Circuito de 4 filas y 4 columnas"></div></div>
-    <p class="hint">Cada clic gira 90° ↻ · Fuente y destino fijos</p>
-    <p id="victory" class="victory" role="status" hidden></p>
-    <button id="restart" class="restart" type="button">↻ Reiniciar partida</button>
-    <div class="legend" aria-label="Leyenda"><span><i class="yellow"></i>Fuente</span><span><i class="cyan"></i>Con energía</span><span><i></i>Sin energía</span></div>
+    <section class="console" aria-label="Panel del circuito">
+      <div class="console-bar"><span><i class="signal" aria-hidden="true"></i> ENLACE DE ENERGÍA</span><span>4 × 4</span></div>
+      <div class="board-frame"><div id="board" class="board" role="group" aria-label="Circuito de 4 filas y 4 columnas" aria-describedby="instructions"></div></div>
+      <div class="console-footer"><span>⚡ FUENTE</span><span aria-hidden="true">→ CONECTA LA RED →</span><span>◎ DESTINO</span></div>
+    </section>
+    <div class="controls"><p class="hint">↻ Giro de 90° <span>· Fuente y destino fijos</span></p><button id="restart" class="restart" type="button">↻ Reiniciar partida</button></div>
+    <section class="guide" aria-labelledby="guide-title"><h2 id="guide-title">Cómo jugar</h2><p id="instructions">Haz clic en las piezas para girarlas 90°. Conecta la fuente de energía con el destino para restaurar el suministro eléctrico.</p><p class="keyboard-hint">Teclado: Tab para elegir · Enter o Espacio para girar.</p>
+      <div class="legend" aria-label="Leyenda"><span><i class="yellow" aria-hidden="true">⚡</i>Fuente</span><span><i class="cyan" aria-hidden="true">●</i>Con energía</span><span><i aria-hidden="true">○</i>Sin energía</span></div>
+    </section>
+    <footer class="page-footer">CIRCUITRUSH <span> / </span> SISTEMA DE RESTAURACIÓN ENERGÉTICA</footer>
     <noscript>Activa JavaScript para jugar CircuitRush.</noscript>
   </main>
+  <dialog id="victory" aria-labelledby="victory-title" aria-describedby="victory-detail">
+    <div class="victory-icon" aria-hidden="true">⚡</div><p class="eyebrow">RED RESTABLECIDA / NIVEL 01</p><h2 id="victory-title">¡Energía restaurada!</h2><p id="victory-detail"></p><button id="play-again" class="restart primary" type="button" autofocus>↻ Jugar nuevamente</button><p class="dialog-hint">Esc para volver al tablero.</p>
+  </dialog>
 </body>
 </html>

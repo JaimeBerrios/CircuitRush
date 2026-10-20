@@ -51,20 +51,40 @@ test('09 y 10: montaje, mensaje de victoria y reinicio mediante DOM simulado', (
     addEventListener(type, action) { this.events[type] = action; }
     querySelector() { return this.wires; }
     setAttribute(key, value) { this.attributes[key] = value; }
+    focus() { this.focused = true; }
+    showModal() { this.open = true; }
+    close() { this.open = false; if (this.events.close) this.events.close(); }
     click() { if (!this.disabled) this.events.click(); }
   }
-  const ids = Object.fromEntries(['board', 'moves', 'status', 'victory', 'restart'].map(id => [id, new Element()]));
+  const ids = Object.fromEntries(['board', 'moves', 'status', 'victory', 'restart', 'victory-detail', 'play-again'].map(id => [id, new Element()]));
   mount({ getElementById: id => ids[id], createElement: () => new Element() });
   assert.equal(ids.board.children.length, 16);
   const initial = ids.board.children.map(b => b.wires.style.transform);
-  for (const [index, turns] of solution) for (let i = 0; i < turns; i++) ids.board.children[index].click();
-  assert.equal(ids.victory.hidden, false); assert.match(ids.victory.textContent, /12 movimientos/);
-  assert.ok(ids.board.children.every(b => b.disabled));
+  assert.equal(ids.status.textContent, 'Desconectado');
+  // Clics consecutivos sin esperas: conserva todos los giros y su orientación.
+  for (let i = 0; i < 40; i++) ids.board.children[2].click();
+  assert.equal(ids.moves.textContent, '40');
+  assert.equal(ids.board.children[2].wires.style.transform, 'rotate(3600deg)');
   ids.restart.click();
-  assert.equal(ids.moves.textContent, '0'); assert.equal(ids.victory.hidden, true);
-  assert.equal(ids.status.textContent, 'Destino sin energía');
+  ids.board.children[1].click(); ids.board.children[1].click();
+  assert.equal(ids.status.textContent, 'Parcialmente conectado');
+  ids.restart.click();
+  for (const [index, turns] of solution) for (let i = 0; i < turns; i++) ids.board.children[index].click();
+  assert.equal(ids.victory.open, true); assert.match(ids['victory-detail'].textContent, /12 movimientos/);
+  assert.equal(ids.status.textContent, 'Restaurado');
+  assert.ok(ids.board.children.every(b => b.disabled));
+  ids['play-again'].click();
+  assert.equal(ids.moves.textContent, '0'); assert.equal(ids.victory.open, false);
+  assert.equal(ids.status.textContent, 'Desconectado');
   assert.deepEqual(ids.board.children.map(b => b.wires.style.transform), initial);
   assert.equal(ids.board.children[1].disabled, false);
+  assert.equal(ids.board.children[1].focused, true);
+  for (const [index, turns] of solution) for (let i = 0; i < turns; i++) ids.board.children[index].click();
+  ids.victory.close();
+  assert.equal(ids.restart.focused, true);
+  assert.ok(ids.board.children.every(b => b.disabled));
+  ids.restart.click();
+  assert.equal(ids.moves.textContent, '0');
 });
 test('rechaza tableros o piezas inválidos', () => {
   assert.throws(() => propagate([]), TypeError);

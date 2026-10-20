@@ -1,6 +1,6 @@
 # CircuitRush: Restaura la Energía
 
-Primera iteración del minijuego individual de «Vibecoding Guiado» de KODIGO Academy, AI for Developers Jr. 3. Conecta la fuente ⚡ con el destino ◎ girando las piezas de un tablero fijo de 4 × 4. Sin servicios externos, cuentas ni base de datos.
+Segunda iteración del minijuego individual de «Vibecoding Guiado» de KODIGO Academy, AI for Developers Jr. 3. Conecta la fuente ⚡ con el destino ◎ girando las piezas de un tablero fijo de 4 × 4. Sin servicios externos, cuentas ni base de datos.
 
 ## Ejecutar localmente
 
@@ -17,7 +17,7 @@ Abre http://127.0.0.1:5000. Detén el servidor con Ctrl+C. La instalación inici
 
 ## Jugar
 
-Haz clic o usa Tab y Enter/Espacio sobre las piezas. Cada giro horario de 90° suma un movimiento. La fuente amarilla y el destino marcado con un círculo son fijos. Las conexiones con energía se iluminan en cian. Solo se transmite energía cuando coinciden los extremos de ambas piezas. Al ganar, el tablero se bloquea; «Reiniciar partida» restaura la configuración original.
+Haz clic o usa Tab y Enter/Espacio sobre las piezas. Cada giro horario de 90° suma un movimiento. La fuente amarilla y el destino marcado con un círculo son fijos. Las conexiones con energía se iluminan en cian. Solo se transmite energía cuando coinciden los extremos de ambas piezas. Al ganar, el tablero se bloquea y aparece un modal con los movimientos reales. «Jugar nuevamente» restaura la configuración original; Esc cierra el modal y permite usar «Reiniciar partida».
 
 ## Archivos y lógica
 
@@ -53,10 +53,12 @@ Solución reproducible desde el inicio (fila y columna empiezan en 1):
 
 Esta secuencia gana en 12 movimientos; no se afirma que sea la solución mínima.
 
-Revisión manual pendiente: abrir la aplicación, confirmar 16 casillas, probar ratón y teclado, observar giros horarios y contador, seguir la solución, comprobar bloqueo y reinicio. Repetir a 320 y 375 píxeles de ancho y en escritorio; comprobar ausencia de desbordamiento, legibilidad y controles utilizables.
+Validación de Iteración 02: siete pruebas Node aprobadas, Flask real con HTTP 200 y comprobaciones en Firefox de teclado, modal, reinicio, clics rápidos y movimiento reducido. Capturas reales en `docs/assets/contenido/evidencias/iteracion-02/`; consultar su README para alcance y pendientes. El Prompt 01 y el Prompt 02 están en `docs/datos/info.md`.
+
+Pendiente: interacción táctil en dispositivos físicos, revisión con lector de pantalla y compatibilidad en otros navegadores. La captura de 390 × 844 valida la presentación móvil; la automatización de interacción se ejecutó en escritorio.
 
 ## Control de versiones
 
 El código está preparado para Git con `.gitignore` para el entorno virtual y cachés. No se realizan commits ni pushes automáticamente. Node se usa solo para las pruebas; el juego requiere Python/Flask y un navegador con JavaScript.
 
-Esta entrega se limita al primer MVP. No incluye niveles adicionales, sonido, temporizador, puntuaciones avanzadas ni IA integrada.
+Esta entrega incorpora el rediseño visual y las mejoras UX de la Iteración 02. No incluye niveles adicionales, sonido, temporizador, puntuaciones avanzadas ni IA integrada.

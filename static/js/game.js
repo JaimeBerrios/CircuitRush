@@ -69,6 +69,9 @@
     const moves = document.getElementById('moves');
     const status = document.getElementById('status');
     const victory = document.getElementById('victory');
+    const victoryDetail = document.getElementById('victory-detail');
+    const playAgain = document.getElementById('play-again');
+    const restartButton = document.getElementById('restart');
     const names = { source: 'Fuente fija', target: 'Destino fijo', straight: 'Recta', corner: 'Esquina' };
     const directions = ['arriba', 'derecha', 'abajo', 'izquierda'];
     const buttons = [];
@@ -77,10 +80,10 @@
       const result = propagate(game.pieces);
       game.won = result.won;
       moves.textContent = String(game.moves);
-      status.textContent = game.won ? 'Energía restaurada' : 'Destino sin energía';
+      status.textContent = game.won ? 'Restaurado' : result.energized.size > 1 ? 'Parcialmente conectado' : 'Desconectado';
+      status.classList.toggle('partial', !game.won && result.energized.size > 1);
       status.classList.toggle('connected', game.won);
-      victory.hidden = !game.won;
-      victory.textContent = game.won ? `¡Ciudad conectada! Restauraste la energía en ${game.moves} movimientos. Reinicia para jugar nuevamente.` : '';
+      victoryDetail.textContent = game.won ? `Restauraste el suministro en ${game.moves} movimientos.` : '';
       game.pieces.forEach((piece, index) => {
         const button = buttons[index];
         const fixed = piece.type === 'source' || piece.type === 'target';
@@ -89,6 +92,8 @@
         button.querySelector('.wires').style.transform = `rotate(${piece.rotation * 90}deg)`;
         button.setAttribute('aria-label', `${names[piece.type]}, fila ${Math.floor(index / SIZE) + 1}, columna ${index % SIZE + 1}. Conexiones: ${connections(piece).map(d => directions[d]).join(', ')}. ${result.energized.has(index) ? 'Con energía' : 'Sin energía'}`);
       });
+      // Abrir después de actualizar las piezas: el foco queda dentro del modal.
+      if (game.won && !victory.open) victory.showModal();
     }
 
     game.pieces.forEach((piece, index) => {
@@ -101,7 +106,22 @@
       buttons.push(button);
       board.appendChild(button);
     });
-    document.getElementById('restart').addEventListener('click', () => { game = createGame(); render(); });
+    function restart() {
+      if (victory.open) victory.close();
+      // Evitar un giro inverso animado al volver a las orientaciones iniciales.
+      buttons.forEach(button => { button.querySelector('.wires').style.transition = 'none'; });
+      game = createGame();
+      render();
+      void board.offsetWidth; // Aplicar las orientaciones antes de recuperar la transición.
+      buttons.forEach(button => { button.querySelector('.wires').style.transition = ''; });
+      buttons[1].focus();
+    }
+    restartButton.addEventListener('click', restart);
+    playAgain.addEventListener('click', restart);
+    victory.addEventListener('keydown', event => {
+      if (event.key === 'Tab') { event.preventDefault(); playAgain.focus(); }
+    });
+    victory.addEventListener('close', () => { if (game.won) restartButton.focus(); });
     render();
   }
 
