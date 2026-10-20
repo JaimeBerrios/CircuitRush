@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#091322">
+  <title>CircuitRush — Restaura la Energía</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script defer src="{{ url_for('static', filename='js/game.js') }}"></script>
+</head>
+<body>
+  <main class="game">
+    <header>
+      <p class="eyebrow">RED URBANA / SECTOR 01</p>
+      <h1>Circuit<span>Rush</span></h1>
+      <h2>Restaura la Energía</h2>
+      <p class="instructions">La ciudad está a oscuras. Gira las piezas para conectar la fuente <strong>⚡</strong> con el destino <strong>◎</strong>.</p>
+    </header>
+    <section class="dashboard" aria-label="Estado de la partida">
+      <div><span class="caption">MOVIMIENTOS</span><strong id="moves">0</strong></div>
+      <div><span class="caption">CONEXIÓN</span><strong id="status" role="status">Preparando tablero…</strong></div>
+    </section>
+    <div class="board-frame"><div id="board" class="board" role="group" aria-label="Circuito de 4 filas y 4 columnas"></div></div>
+    <p class="hint">Cada clic gira 90° ↻ · Fuente y destino fijos</p>
+    <p id="victory" class="victory" role="status" hidden></p>
+    <button id="restart" class="restart" type="button">↻ Reiniciar partida</button>
+    <div class="legend" aria-label="Leyenda"><span><i class="yellow"></i>Fuente</span><span><i class="cyan"></i>Con energía</span><span><i></i>Sin energía</span></div>
+    <noscript>Activa JavaScript para jugar CircuitRush.</noscript>
+  </main>
+</body>
+</html>
